@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  backend:
+    image: malikawan22/backend:v1
+    build:
+      context: ./backend
+      dockerfile: dockerfile
+    ports:
+      - "5000:5000"
+    networks:
+      - app-network
+    deploy:
+      replicas: 2
+
+  frontend:
+    image: malikawan22/frontend:v1
+    build:
+      context: ./frontend
+      dockerfile: dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+    depends_on:
+      - backend
+    deploy:
+      replicas: 2
+
+networks:
+  app-network:
+    driver: overlay
+

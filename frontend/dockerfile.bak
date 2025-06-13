@@ -1,0 +1,20 @@
+# frontend/Dockerfile
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm install
+
+COPY . .
+
+# Set environment variable to fix openssl error during build
+ENV NODE_OPTIONS=--openssl-legacy-provider
+
+RUN npm run build
+
+# Serve the build folder with a simple static server
+RUN npm install -g serve
+
+CMD ["serve", "-s", "build", "-l", "3000"]
+

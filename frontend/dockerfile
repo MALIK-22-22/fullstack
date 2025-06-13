@@ -1,0 +1,32 @@
+# Base image
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copy package files and install dependencies
+COPY package.json package-lock.json ./
+RUN npm install
+
+# Copy source code
+COPY . .
+
+# Set default environment variable
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
+
+# Set Node options (fix openssl error for some Node versions)
+ENV NODE_OPTIONS=--openssl-legacy-provider
+
+# Build React app only if production mode
+RUN if [ "$NODE_ENV" = "production" ]; then npm run build; fi
+
+# Expose port 3000 (React dev server or serve)
+EXPOSE 3000
+
+# Copy and set start script
+COPY start.sh ./start.sh
+RUN chmod +x ./start.sh
+
+# Use exec form CMD to avoid warning
+CMD ["sh", "./start.sh"]
+
