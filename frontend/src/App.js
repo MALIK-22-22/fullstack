@@ -17,7 +17,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Simple DBMS API change from</h1>
+      <h1>Simple DBMS API change from git</h1>
       {apiData ? (
         <>
           <p>{apiData.message}</p>
